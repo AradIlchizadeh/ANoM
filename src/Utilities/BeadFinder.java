@@ -3,42 +3,42 @@ package Utilities;
 import Interfaces.IBeadFinder;
 import Interfaces.IBlob;
 import Interfaces.IFactory;
-import Models.Blob;
 
 import java.util.ArrayList;
 
 public class BeadFinder implements IBeadFinder {
 
     private ArrayList<IBlob> blobs;
-    private boolean[][] result;
+    private boolean[][] cleanedData;
     private boolean[][] visited;
     private int width;
     private int height;
     private IBlob current;
 
     public BeadFinder(boolean[][] input) {
-        result = input;
-        width = result.length;
-        height = result[0].length;
+        cleanedData = input;
+        width = cleanedData.length;
+        height = cleanedData[0].length;
         visited = new boolean[width][height];
+        blobs = new ArrayList<>();
     }
 
     public void findBlobs() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (result[i][j] && !visited[i][j]) {
+                if (cleanedData[i][j] && !visited[i][j]) {
                     current = IFactory.createBlob();
                     blobs.add(current);
-                    dfs(i, j);
+                    DFS_Search(i, j);
 
                 }
             }
         }
     }
 
-    private void dfs(int x, int y) {
-        if (x < 0 && x >= width && y < 0 && y >= height) return;
-        if (!result[x][y]) return;
+    private void DFS_Search(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) return;
+        if (!cleanedData[x][y]) return;
         if (visited[x][y]) return;
 
         visited[x][y] = true;
@@ -46,9 +46,9 @@ public class BeadFinder implements IBeadFinder {
 
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
-                if (k == x && l == y)
+                if (k == 0 && l == 0)
                     continue;
-                dfs(x + k, y + l);
+                DFS_Search(x + k, y + l);
             }
 
         }

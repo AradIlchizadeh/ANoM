@@ -6,7 +6,7 @@ public class Blob implements IBlob {
 
     private float X;
     private float Y;
-    private int mass;
+    private int mass = 0;
 
     public Blob(){}
 
@@ -38,6 +38,6 @@ public class Blob implements IBlob {
     @Override
     public String toString() {
 
-        return mass + " " + "( " + X + ", " + Y + ")";
+        return mass + " " + "( " + getCenterX() + ", " + getCenterY() + ")";
     }
 }

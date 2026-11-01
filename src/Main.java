@@ -1,7 +1,4 @@
 import Interfaces.*;
-import Models.Blob;
-import Models.Picture;
-import Utilities.DataRefiner;
 
 import java.util.ArrayList;
 
@@ -11,9 +8,9 @@ public class Main {
         int tau = Integer.parseInt(args[1]);
         IPicture picture = IFactory.createPicture(args[2]);
 
-        IDataRefiner dataRefiner = IFactory.createRefiner(picture, tau);
-        dataRefiner.Fill();
-        IBeadFinder beadFinder = IFactory.createBeadFinder(dataRefiner.getResults());
+        IDataCleaner Cleaner = IFactory.createCleaner(picture, tau);
+        Cleaner.clean();
+        IBeadFinder beadFinder = IFactory.createBeadFinder(Cleaner.getCleanedData());
         beadFinder.findBlobs();
         ArrayList<IBlob> beads = beadFinder.getBeads(minPixel);
 

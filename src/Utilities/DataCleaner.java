@@ -1,38 +1,38 @@
 package Utilities;
 
 
-import Interfaces.IDataRefiner;
+import Interfaces.IDataCleaner;
 import Interfaces.IPicture;
 
-public class DataRefiner implements IDataRefiner {
+public class DataCleaner implements IDataCleaner {
 
     private IPicture picture;
-    private boolean[][] result;
+    private boolean[][] cleanedData;
     private int width;
     private int height;
     private int tau;
 
-    public DataRefiner(IPicture input, int tau) {
+    public DataCleaner(IPicture input, int tau) {
         picture = input;
         width = picture.width();
         height = picture.height();
-        result = new boolean[width][height];
+        cleanedData = new boolean[width][height];
         this.tau = tau;
 
     }
 
-    public void Fill() {
+    public void clean() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (picture.getAlpha(i, j) >= tau) {
-                    result[i][j] = true;
+                if (picture.getLuminance(i, j) >= tau) {
+                    cleanedData[i][j] = true;
                 }
             }
         }
     }
 
-    public boolean[][] getResults() {
-        return result;
+    public boolean[][] getCleanedData() {
+        return cleanedData;
     }
 
 }

@@ -14,8 +14,8 @@ public interface IFactory {
         return new Picture(address);
     }
 
-    public static IDataRefiner createRefiner(IPicture input, int tau){
-        return new DataRefiner(input, tau);
+    public static IDataCleaner createCleaner(IPicture input, int tau){
+        return new DataCleaner(input, tau);
     }
 
     public static IBeadFinder createBeadFinder(boolean[][] input){

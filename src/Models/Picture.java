@@ -604,9 +604,9 @@ public final class Picture implements ActionListener, IPicture {
         else                   return image.getRGB(col, height - row - 1);
     }
 
-    public int getAlpha(int col, int row){
-        int a = getARGB(col, row);
-        return (a >> 24) & 0xFF;
+    public double getLuminance(int col, int row) {
+        Color color = get(col, row);
+        return 0.299 * color.getRed() + 0.587 * color.getGreen() + 0.114 * color.getBlue();
     }
 
     /**
