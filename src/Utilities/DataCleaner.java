@@ -21,7 +21,7 @@ public class DataCleaner implements IDataCleaner {
 
     }
 
-    public void clean() {
+    private void clean() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (picture.getLuminance(i, j) >= tau) {
@@ -32,6 +32,7 @@ public class DataCleaner implements IDataCleaner {
     }
 
     public boolean[][] getCleanedData() {
+        clean();
         return cleanedData;
     }
 

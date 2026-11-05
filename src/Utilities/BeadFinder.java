@@ -23,7 +23,7 @@ public class BeadFinder implements IBeadFinder {
         blobs = new ArrayList<>();
     }
 
-    public void findBlobs() {
+    private void findBlobs() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (cleanedData[i][j] && !visited[i][j]) {
@@ -53,11 +53,11 @@ public class BeadFinder implements IBeadFinder {
 
         }
 
-
     }
 
-
+    // finds all the blobs by itself (DFS), then returns only the blobs with at least minPixels pixels
     public ArrayList<IBlob> getBeads(int minPixels) {
+        findBlobs();
         ArrayList<IBlob> beads = new ArrayList<>();
         for (IBlob blob : blobs) {
             if (blob.mass() >= minPixels)

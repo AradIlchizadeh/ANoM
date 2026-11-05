@@ -1,22 +1,16 @@
 package Models;
 
-import java.util.ArrayList;
+import java.util.Locale;
 
 import Interfaces.IBlob;
-import Interfaces.IBlobTracker;
 
-public class Blob implements IBlob, IBlobTracker {
+public class Blob implements IBlob {
 
-    private float X;
-    private float Y;
+    private double X;
+    private double Y;
     private int mass = 0;
-    private ArrayList<IBlob> neighborsByDist;
-    private IBlob closestNeighbor;
 
-    public Blob(){
-        neighborsByDist = new ArrayList<>();
-        closestNeighbor = null;
-    }
+    public Blob(){}
 
     public void addPixel(int x, int y){
         X += x;
@@ -29,34 +23,23 @@ public class Blob implements IBlob, IBlobTracker {
     }
 
     public double distance(IBlob other){
-        float deltaX = other.getCenterX() - this.getCenterX();
-        float deltaY = other.getCenterY() - this.getCenterY();
+        double deltaX = other.getCenterX() - this.getCenterX();
+        double deltaY = other.getCenterY() - this.getCenterY();
 
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
     }
 
-    public float getCenterX(){
+    public double getCenterX(){
         return X / mass;
     }
 
-    public float getCenterY(){
+    public double getCenterY(){
         return Y / mass;
     }
 
     @Override
     public String toString() {
-
-        return mass + " " + "( " + getCenterX() + ", " + getCenterY() + ")";
-    }
-    public IBlob getClosestNeighbor(){
-        return closestNeighbor;
-    }
-    
-    public void setClosestNeighbor(IBlob neighbor){
-        closestNeighbor = neighbor;
+        return String.format(Locale.US, "%d (%.4f, %.4f)", mass, getCenterX(), getCenterY());
     }
 
-    public ArrayList<IBlob> getNeighborsByDist(){
-        return neighborsByDist;
-    }
 }

@@ -1,5 +1,4 @@
 package Interfaces;
-import Interfaces.IBlobTracker;
 
 public interface IBlob {
 
@@ -9,14 +8,10 @@ public interface IBlob {
 
     public double distance(IBlob bead);
 
-    public float getCenterX();
+    public double getCenterX();
 
-    public float getCenterY();
+    public double getCenterY();
 
     public String toString();
 
-    public IBlob getClosestNeighbor();
-
-
-    
 }

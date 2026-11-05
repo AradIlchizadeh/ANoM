@@ -4,6 +4,8 @@ import Models.Blob;
 import Models.Picture;
 import Utilities.*;
 
+import java.util.ArrayList;
+
 public interface IFactory {
 
     public static IBlob createBlob() {
@@ -20,5 +22,9 @@ public interface IFactory {
 
     public static IBeadFinder createBeadFinder(boolean[][] input){
         return new BeadFinder(input);
+    }
+
+    public static IBeadTracker createBeadTracker(ArrayList<IBlob> beadsF1, ArrayList<IBlob> beadsF2){
+        return new BeadTracker(beadsF1, beadsF2);
     }
 }
