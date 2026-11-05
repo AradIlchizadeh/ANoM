@@ -14,7 +14,7 @@ public interface IFactory {
         return new Picture(address);
     }
 
-    public static IDataCleaner createCleaner(IPicture input, int tau){
+    public static IDataCleaner createCleaner(IPicture input, double tau){
         return new DataCleaner(input, tau);
     }
 

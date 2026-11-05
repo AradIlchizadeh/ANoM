@@ -1,14 +1,22 @@
 package Models;
 
-import Interfaces.IBlob;
+import java.util.ArrayList;
 
-public class Blob implements IBlob {
+import Interfaces.IBlob;
+import Interfaces.IBlobTracker;
+
+public class Blob implements IBlob, IBlobTracker {
 
     private float X;
     private float Y;
     private int mass = 0;
+    private ArrayList<IBlob> neighborsByDist;
+    private IBlob closestNeighbor;
 
-    public Blob(){}
+    public Blob(){
+        neighborsByDist = new ArrayList<>();
+        closestNeighbor = null;
+    }
 
     public void addPixel(int x, int y){
         X += x;
@@ -20,7 +28,7 @@ public class Blob implements IBlob {
         return mass;
     }
 
-    public double distance(Blob other){
+    public double distance(IBlob other){
         float deltaX = other.getCenterX() - this.getCenterX();
         float deltaY = other.getCenterY() - this.getCenterY();
 
@@ -39,5 +47,16 @@ public class Blob implements IBlob {
     public String toString() {
 
         return mass + " " + "( " + getCenterX() + ", " + getCenterY() + ")";
+    }
+    public IBlob getClosestNeighbor(){
+        return closestNeighbor;
+    }
+    
+    public void setClosestNeighbor(IBlob neighbor){
+        closestNeighbor = neighbor;
+    }
+
+    public ArrayList<IBlob> getNeighborsByDist(){
+        return neighborsByDist;
     }
 }

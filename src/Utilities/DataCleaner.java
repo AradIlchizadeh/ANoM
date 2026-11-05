@@ -10,9 +10,9 @@ public class DataCleaner implements IDataCleaner {
     private boolean[][] cleanedData;
     private int width;
     private int height;
-    private int tau;
+    private double tau;
 
-    public DataCleaner(IPicture input, int tau) {
+    public DataCleaner(IPicture input, double tau) {
         picture = input;
         width = picture.width();
         height = picture.height();
