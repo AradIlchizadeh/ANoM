@@ -13,6 +13,11 @@
 </p>
 
 <p align="center">
+  <strong>A project by Group 2</strong><br>
+  <sub>Arad Ilchizadeh · Amir Parvin · Raha Bandeh · Sanay Sadagian · Shani Azizan</sub>
+</p>
+
+<p align="center">
   <img src="src/Dataset/run_1/frame00010.jpg" alt="Microscope image of polystyrene beads suspended in water" width="640">
 </p>
 
@@ -68,12 +73,12 @@ The program prints estimates for the Boltzmann constant and Avogadro's number. I
 
 ## Arguments
 
-| Argument | Meaning | Example |
-| --- | --- | --- |
-| `minPixel` | Minimum pixels for a connected component to count as a bead | `25` |
-| `tau` | Luminance threshold for separating foreground from background | `180.0` |
-| `delta` | Maximum bead-to-bead distance, in pixels, to accept as a match | `25.0` |
-| `folderAddress` | Directory containing the run's JPEG frames | `src/Dataset/run_1` |
+| Argument        | Meaning                                                        | Example             |
+| --------------- | -------------------------------------------------------------- | ------------------- |
+| `minPixel`      | Minimum pixels for a connected component to count as a bead    | `25`                |
+| `tau`           | Luminance threshold for separating foreground from background  | `180.0`             |
+| `delta`         | Maximum bead-to-bead distance, in pixels, to accept as a match | `25.0`              |
+| `folderAddress` | Directory containing the run's JPEG frames                     | `src/Dataset/run_1` |
 
 The included dataset folders are `run_1`–`run_4` and `run_8`–`run_10`; each contains 200 sequential JPEG frames. To process another run, replace the input folder. The output filename is generated automatically from that folder's name.
 
