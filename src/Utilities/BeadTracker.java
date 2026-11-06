@@ -26,8 +26,8 @@ public class BeadTracker implements IBeadTracker {
                 if(distance <= delta && distance < minDistance)
                     minDistance = distance;
             }
-
-                writer.println(String.format(Locale.US, "%.4f", minDistance));
+            if(minDistance <= delta)
+               writer.println(String.format(Locale.US, "%.4f", minDistance));
         }
     }
 }
