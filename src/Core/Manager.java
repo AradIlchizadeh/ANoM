@@ -1,5 +1,6 @@
 package Core;
 
+import Interfaces.IAvogadro;
 import Interfaces.IBeadFinder;
 import Interfaces.IBeadTracker;
 import Interfaces.IBlob;
@@ -10,25 +11,42 @@ import Interfaces.IPicture;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Locale;
 
 public class Manager {
 
-    public static void run(int minPixel, double tau, double delta, String folderAddress, PrintWriter writer) throws Exception {
+    public static void getAvogadro(int minPixel, double tau, double delta, String folderAddress) throws Exception {
 
-        File[] pictures = getSortedPictures(folderAddress);
+        String outputFile = "displacements-" + new File(folderAddress).getName() + ".txt";
 
-        for (int i = 0; i < pictures.length - 1; i++) {
+        try (PrintWriter writer = new PrintWriter(outputFile)) {
+            trackPictures(minPixel, tau, delta, folderAddress, writer);
+        }
 
-            ArrayList<IBlob> beadsI = findBeads(pictures[i].getPath(), minPixel, tau);
-            ArrayList<IBlob> beadsNext = findBeads(pictures[i + 1].getPath(), minPixel, tau);
+        IAvogadro avogadro = IFactory.createAvogadro();
+        double boltzmannConstant = avogadro.calculateBoltzmann(outputFile);
+        double avogadroNumber = avogadro.calculateAvogadro(outputFile);
+
+        System.out.println(String.format(Locale.US, "Boltzmann = %.4e", boltzmannConstant));
+        System.out.println(String.format(Locale.US, "Avogadro = %.4e", avogadroNumber));
+    }
+
+    private static void trackPictures(int minPixel, double tau, double delta, String folderAddress, PrintWriter writer) throws Exception {
+
+        ArrayList<File> pictures = getSortedPictures(folderAddress);
+
+        for (int i = 0; i < pictures.size() - 1; i++) {
+
+            ArrayList<IBlob> beadsI = findBeads(pictures.get(i).getPath(), minPixel, tau);
+            ArrayList<IBlob> beadsNext = findBeads(pictures.get(i + 1).getPath(), minPixel, tau);
 
             IBeadTracker tracker = IFactory.createBeadTracker(beadsNext, beadsI);
             tracker.trackBeads(delta, writer);
         }
     }
 
-    private static File[] getSortedPictures(String folderAddress) throws Exception {
+    private static ArrayList<File> getSortedPictures(String folderAddress) throws Exception {
 
         File[] allFiles = new File(folderAddress).listFiles();
         if(allFiles == null)
@@ -42,9 +60,9 @@ public class Manager {
         if(files.size() < 2)
             throw new Exception("folder has less than 2 pictures.");
 
-        File[] sorted = files.toArray(new File[0]);
-        Arrays.sort(sorted);
-        return sorted;
+        files.sort(Comparator.comparing(File::getName));
+
+        return files;
     }
 
     private static ArrayList<IBlob> findBeads(String address, int minPixel, double tau) {

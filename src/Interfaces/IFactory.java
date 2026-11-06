@@ -27,4 +27,8 @@ public interface IFactory {
     public static IBeadTracker createBeadTracker(ArrayList<IBlob> beadsF1, ArrayList<IBlob> beadsF2){
         return new BeadTracker(beadsF1, beadsF2);
     }
+
+     public static IAvogadro createAvogadro(){
+        return new Avogadro();
+    }
 }
