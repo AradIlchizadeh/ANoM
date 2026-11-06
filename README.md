@@ -48,6 +48,65 @@ flowchart LR
 
 The image processor thresholds pixels by luminance, then uses depth-first search to find 8-connected components. Small components are discarded; the remaining bead centers are compared across consecutive frames. The resulting radial displacements are converted from pixels to meters and used to estimate the diffusion constant, Boltzmann constant, and Avogadro's number.
 
+## Full program flow
+
+```mermaid
+flowchart TD
+    START(["java Core.Main minPixel tau delta folder"]) --> ARGS{"4 arguments?"}
+    ARGS -- "No" --> ERR1(["Error: usage message"])
+    ARGS -- "Yes" --> MGR["Manager.getAvogadro"]
+
+    MGR --> LIST["List *.jpg in folder<br/>sorted by filename"]
+    LIST --> CHK{"At least 2 frames?"}
+    CHK -- "No" --> ERR2(["Error: folder invalid<br/>or too few pictures"])
+    CHK -- "Yes" --> LOOP
+
+    subgraph TRACK ["Frame-pair loop (frame i and frame i+1)"]
+        direction TB
+        LOOP["Take next pair of frames"] --> FIND1["findBeads(frame i)"]
+        LOOP --> FIND2["findBeads(frame i+1)"]
+
+        subgraph FB ["findBeads(image)"]
+            direction TB
+            P["Picture<br/>load JPEG"] --> DC["DataCleaner<br/>luminance ≥ tau ⇒ foreground"]
+            DC --> BF["BeadFinder<br/>DFS over 8-connected pixels"]
+            BF --> BL["Blob<br/>pixel count + center of mass"]
+            BL --> MIN{"mass ≥ minPixel?"}
+            MIN -- "Yes" --> BEAD["Bead"]
+            MIN -- "No" --> DROP["Discard blob"]
+        end
+
+        FIND1 --> BT
+        FIND2 --> BT
+        BT["BeadTracker<br/>for each bead in frame i+1, find the<br/>nearest bead in frame i"] --> WITHIN{"distance ≤ delta?"}
+        WITHIN -- "Yes" --> WRITE["Write displacement (pixels)<br/>to displacements-run_N.txt"]
+        WITHIN -- "No" --> SKIP["No match, skip"]
+        WRITE --> MORE{"More frame pairs?"}
+        SKIP --> MORE
+        MORE -- "Yes" --> LOOP
+    end
+
+    MORE -- "No" --> READ["Avogadro<br/>read displacements file"]
+    READ --> VAR["Variance<br/>σ² = Σr² · (0.175e-6)² / 2n"]
+    VAR --> DIFF["Diffusion constant<br/>D = σ² / (2·Δt),  Δt = 0.5 s"]
+    DIFF --> KB["Boltzmann constant<br/>k = 6π·η·ρ·D / T"]
+    KB --> NA["Avogadro's number<br/>Nₐ = R / k"]
+    NA --> OUT(["Print Boltzmann and Avogadro<br/>to the console"])
+
+    classDef io fill:#e8f1f5,stroke:#286983,color:#17313d
+    classDef process fill:#fff3d6,stroke:#c58b22,color:#44310d
+    classDef decision fill:#f3e8f7,stroke:#8a4fa3,color:#3a1f47
+    classDef result fill:#e6f4ea,stroke:#43845a,color:#183d24
+    classDef error fill:#fde8e8,stroke:#c0392b,color:#5c1a14
+    class START,WRITE io
+    class MGR,LIST,LOOP,FIND1,FIND2,P,DC,BF,BL,BEAD,BT,READ,VAR,DIFF,KB,NA,DROP,SKIP process
+    class ARGS,CHK,MIN,WITHIN,MORE decision
+    class OUT result
+    class ERR1,ERR2 error
+```
+
+The physical constants (pixel size, Δt, temperature, viscosity, bead radius, and the gas constant) live in `Utilities/Config.java`.
+
 ## Run it
 
 You'll need a JDK with `javac` and `java` available on your `PATH`. Run these commands from the repository root.
@@ -92,6 +151,14 @@ src/
 ├── Models/       # Blob and picture models
 └── Utilities/    # Thresholding, bead detection/tracking, and calculations
 ```
+
+## Class diagram
+
+<p align="center">
+  <img src="docs/class-diagram.png" alt="UML class diagram showing how Core, Interfaces, Models and Utilities classes relate" width="100%">
+</p>
+
+The full-size vector version is available as [docs/class-diagram.pdf](docs/class-diagram.pdf).
 
 ## Notes
 
