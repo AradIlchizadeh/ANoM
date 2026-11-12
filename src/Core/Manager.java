@@ -20,6 +20,7 @@ public class Manager {
 
         String outputFile = "displacements-" + new File(folderAddress).getName() + ".txt";
 
+        // for closing writer automatically using try-with-resources
         try (PrintWriter writer = new PrintWriter(outputFile)) {
             trackPictures(minPixel, tau, delta, folderAddress, writer);
         }

@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class Avogadro implements IAvogadro {
-
+    //address refers to the file path containing displacement data
     public double calculateBoltzmann(String address) throws Exception {
         double variance = calculateVariance(address);
         double diffusionConstant = calculateDiffusionConstant(variance);
@@ -23,7 +23,7 @@ public class Avogadro implements IAvogadro {
     private double calculateVariance(String address) throws Exception {
         double sum = 0;
         int count = 0;
-
+        //for closing reader automatically using try-with-resources
         try (BufferedReader reader = new BufferedReader(new FileReader(address))) {
             String line;
             while ((line = reader.readLine()) != null) {
